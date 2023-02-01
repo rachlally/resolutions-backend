@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
-class Todo extends Model {}
+class Resolution extends Model {}
 
-Todo.init({
+Resolution.init({
     task: {
         type: DataTypes.STRING,
         allowNull:false
@@ -21,4 +21,4 @@ Todo.init({
     sequelize
 });
 
-module.exports=Todo
+module.exports=Resolution

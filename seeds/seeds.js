@@ -1,5 +1,5 @@
 const sequelize = require('../config/connection');
-const {User,Todo} = require("../models")
+const {User,Resolution} = require("../models")
 const seedMe = async ()=>{
     await sequelize.sync({force:true})
     const users = [
@@ -16,7 +16,7 @@ const seedMe = async ()=>{
             password:"password3"
         }
     ]
-    const todos = [
+    const resolutions = [
         {
             task:"Cook food more often",
             priority:"high",
@@ -39,7 +39,7 @@ const seedMe = async ()=>{
         await User.bulkCreate(users,{
             individualHooks:true
         })
-        await Todo.bulkCreate(todos)
+        await Resolution.bulkCreate(resolutions)
     }catch(err){
         throw err
     }

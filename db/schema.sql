@@ -1,2 +1,2 @@
-DROP DATABASE IF EXISTS todo_db;
-CREATE DATABASE todo_db;
+DROP DATABASE IF EXISTS resolution_db;
+CREATE DATABASE resolution_db;

@@ -1,10 +1,10 @@
 const User=require('./User')
-const Todo=require('./Todo')
+const Resolution=require('./Resolution')
 
-User.hasMany(Todo);
-Todo.belongsTo(User);
+User.hasMany(Resolution);
+Resolution.belongsTo(User);
 
 module.exports={
     User,
-    Todo
+    Resolution
 }
