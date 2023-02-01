@@ -8,5 +8,25 @@
     "mysql2": "^2.3.3",
     "node.js": "^0.0.1-security",
     "sequelize": "^6.28.0"
-  }
+  },
+  "scripts": {
+    "start": "node server.js",
+    "seed": "node seeds/seeds.js"
+  },
+  "name": "resolutions-backend",
+  "description": "Backend Sequelize Application for React-Resolutions",
+  "version": "1.0.0",
+  "main": "server.js",
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rachlally/resolutions-backend.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rachlally/resolutions-backend/issues"
+  },
+  "homepage": "https://github.com/rachlally/resolutions-backend#readme"
 }

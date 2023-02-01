@@ -1,0 +1,31 @@
+const express = require('express');
+const router = express.Router();
+const {User, Resolution} = require('../models');
+
+router.get('/', (req,res)=>{
+    User.findAll().then(userData=>{
+        res.json(userData)
+    }).catch(err=>{
+        console.log(err);
+        res.json({
+            msg: "An error occured.",
+            err,
+        })
+    })
+})
+
+router.get('/:id',(req,res)=>{
+    User.findByPk(req.params.id,{
+        include:[Resolution]
+    }).then(userData=>{
+        res.json(userData)
+    }).catch(err=>{
+        console.log(err);
+        res.json({
+            msg:"An error occured.",
+            err,
+        })
+    })
+})
+
+module.exports = router;
