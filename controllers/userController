@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const {User, Resolution} = require('../models');
+const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
+const { User, Resolution } = require('../models');
 
-router.get('/', (req,res)=>{
-    User.findAll().then(userData=>{
+router.get('/', (req, res) => {
+    User.findAll().then(userData => {
         res.json(userData)
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
         res.json({
             msg: "An error occured.",
@@ -14,17 +16,44 @@ router.get('/', (req,res)=>{
     })
 })
 
-router.get('/:id',(req,res)=>{
-    User.findByPk(req.params.id,{
-        include:[Resolution]
-    }).then(userData=>{
+router.get('/:id', (req, res) => {
+    User.findByPk(req.params.id, {
+        include: [Resolution]
+    }).then(userData => {
         res.json(userData)
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
         res.json({
-            msg:"An error occured.",
+            msg: "An error occured.",
             err,
         })
+    })
+})
+
+router.post("/login", (req, res) => {
+    User.findOne({
+        where: {
+            email: req.body.email
+        }
+    }).then(foundUser => {
+        if (!foundUser) {
+            return res.status(401).json({ msg: "Invalid login credentials." })
+        } else if (!bcrypt.compareSync(req.body.password, foundUser.password)) {
+            return res.status(401).json({ msg: "invalid login credentials" });
+        } else {
+            const token = jwt.sign(
+                {
+                    id: foundUser.id,
+                    email: foundUser.email,
+                },process.env.JWT_SECRET,{
+                    expiresIn: "2h",
+                }
+            );
+            return res.json({
+                token,
+                user: foundUser,
+            });
+        }
     })
 })
 

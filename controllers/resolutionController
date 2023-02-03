@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
-const {User, Resolution} = require('../models');
+const jwt = require("jsonwebtoken");
+const { User, Resolution } = require('../models');
 
-router.get('/', (req,res)=>{
-    Resolution.findAll().then(resolutionData=>{
+router.get('/', (req, res) => {
+    Resolution.findAll().then(resolutionData => {
         res.json(resolutionData)
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
         res.json({
             msg: "An error occured.",
@@ -14,18 +15,36 @@ router.get('/', (req,res)=>{
     })
 })
 
-router.get('/:id',(req,res)=>{
-    Resolution.findByPk(req.params.id,{
-        include:[User]
-    }).then(resolutionData=>{
+router.get('/:id', (req, res) => {
+    Resolution.findByPk(req.params.id, {
+        include: [User]
+    }).then(resolutionData => {
         res.json(resolutionData)
-    }).catch(err=>{
+    }).catch(err => {
         console.log(err);
         res.json({
-            msg:"An error occured.",
+            msg: "An error occured.",
             err,
         })
     })
+})
+
+router.post('/', (req, res) => {
+    try {
+        const token = req.headers.authorization.split(" ")[1];
+        const userData = jwt.verify(token, process.env.JWT_SECRET)
+        Resolution.create({
+            task: req.body.task,
+            priority: req.body.priority,
+            isComplete: req.body.isComplete,
+            UserId: userData.id
+    }).then(resolutionData=>{
+        res.json(resolutionData)
+    })
+    } catch (err){
+        console.log(err);
+        res.status(500).json({msg:"Error occurred.", err})
+    }
 })
 
 module.exports = router;
