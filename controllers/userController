@@ -15,13 +15,27 @@ router.get('/', (req, res) => {
         })
     })
 })
-router.get('/getuserfromtoken',(req,res)=>{
-    try{
+router.post("/",(req,res)=>{
+    User.create(req.body).then(newUser=>{
+        const token = jwt.sign({
+            id:newUser.id,
+            email:newUser.email
+        },process.env.JWT_SECRET,{
+            expiresIn:"2h"
+        })
+        return res.json({
+            token,
+            user:newUser
+        })
+    })
+})
+router.get('/getuserfromtoken', (req, res) => {
+    try {
         const token = req.headers.authorization.split(" ")[1];
-        const userData = jwt.verify(token,process.env.JWT_SECRET)
-        res.json({user:userData})
+        const userData = jwt.verify(token, process.env.JWT_SECRET)
+        res.json({ user: userData })
     } catch (error) {
-        res.status(500).json({user:false})
+        res.status(500).json({ user: false })
     }
 })
 router.get('/:id', (req, res) => {
@@ -53,9 +67,9 @@ router.post("/login", (req, res) => {
                 {
                     id: foundUser.id,
                     email: foundUser.email,
-                },process.env.JWT_SECRET,{
-                    expiresIn: "2h",
-                }
+                }, process.env.JWT_SECRET, {
+                expiresIn: "2h",
+            }
             );
             return res.json({
                 token,
